@@ -1,0 +1,32 @@
+<nav class="navbar">
+    <div class="container">
+      <div  class="nav-links logo">
+        <button>🛒 MyStore</button>
+      </div>
+  
+      <ul class="nav-links" *ngIf="userLoggedIn; else guestView">
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/carrito">Carrito</a></li>
+      </ul>
+  
+      <div class="user-actions" *ngIf="userLoggedIn">
+        <div class="dropdown">
+          <button class="dropbtn" (click)="toggleDropdown()">
+            Mi cuenta ▼
+          </button>
+          <div class="dropdown-content" [ngClass]="{ show: isDropdownOpen }">
+            <span class="email">{{ userEmail }}</span>
+            <a (click)="signOut()">Cerrar sesión</a>
+          </div>
+        </div>
+      </div>
+  
+      <ng-template #guestView>
+        <ul class="nav-links">
+          <li><a routerLink="/login">Iniciar sesión</a></li>
+          <li><a routerLink="/register">Registrarse</a></li>
+        </ul>
+      </ng-template>
+    </div>
+  </nav>
+  
