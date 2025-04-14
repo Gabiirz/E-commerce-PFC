@@ -1,4 +1,8 @@
 .navbar {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 12px 24px;
@@ -52,6 +56,7 @@
   
   .dropdown-content {
     display: none;
+    justify-content: center;
     position: absolute;
     right: 0;
     top: 35px;
@@ -80,9 +85,8 @@
     background-color: #f0f0f0;
   }
   
-  @media (max-width: 768px) {
+  @media (max-width: 300px) {
     .nav-links {
       display: none;
     }
   }
-  

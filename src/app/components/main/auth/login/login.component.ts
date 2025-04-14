@@ -28,7 +28,7 @@ export class LoginComponent {
     console.log(resp)
     if(resp.data.user.role === "authenticated"){
       
-      this.router.navigate(['/'])
+      this.router.navigate(['productos'])
       
     }
    })
