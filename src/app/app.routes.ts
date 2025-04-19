@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/main/auth/login/login.component';
 import { RegisterComponent } from './components/main/auth/register/register.component';
-import { RedirectToLoginGuard } from './guards/redirect.guard';
 
 
 export const routes: Routes = [

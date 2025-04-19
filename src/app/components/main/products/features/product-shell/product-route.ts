@@ -7,7 +7,7 @@ export default[
 
 
     {
-        path: 'product/:id',
+        path: ':id',
         loadComponent:() => import('../product-detail/product-detail.component'),
     }
 
