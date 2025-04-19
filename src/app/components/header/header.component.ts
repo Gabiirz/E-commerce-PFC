@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, Inject, computed, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../service/authService/auth.service';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -14,16 +14,21 @@ import { CartStateService } from '../../service/data-access/cart-state.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  
-  cartState = Inject(CartStateService).state;
+  cartState = inject(CartStateService).state; // aseguramos que se cree 1 sola vez
+ 
+
+
+
   userLoggedIn = false;
   isDropdownOpen = false;
   userEmail: string | null = null;
   private authSub: Subscription | undefined;
 
+
   constructor(private authService: AuthService,) {}
   
   ngOnInit() {
+    
     this.authSub = this.authService.isLoggedIn$.subscribe(async (loggedIn) => {
       this.userLoggedIn = loggedIn;
       if (loggedIn) {

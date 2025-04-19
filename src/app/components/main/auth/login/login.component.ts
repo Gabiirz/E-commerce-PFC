@@ -29,7 +29,7 @@ export class LoginComponent {
     if(resp.data.user.role === "authenticated"){
       
       this.router.navigate(['products'])
-      
+
     }
    })
    .catch((err: any) =>{
@@ -37,4 +37,8 @@ export class LoginComponent {
    })
   }
   
+
+  async ngOnInit() {
+    await this.authService.signOut(); // <-- cerrar sesión automáticamente al entrar al login
+  }
 }
