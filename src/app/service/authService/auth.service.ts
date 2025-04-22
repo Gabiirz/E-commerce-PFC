@@ -25,6 +25,22 @@ export class AuthService {
 
   async signUp(email: string, password: string) {
     const { data, error } = await this.supabaseService.auth.signUp({ email, password });
+    // 2. Si el usuario se ha registrado bien, insertamos en la tabla 'usuarios'
+  const supabaseUser = data.user;
+
+    if (supabaseUser) {
+    const { error: insertError } = await this.supabaseService.supabase
+      .from('usuarios')
+      .insert([{
+        id: supabaseUser.id,           // mismo ID que en Supabase Auth
+        email: email,
+        password: password,          // ⚠️ Idealmente deberías cifrar esta contraseña
+      }]);
+
+    if (insertError) {
+      console.error('Error insertando en tabla usuarios:', insertError);
+    }
+  }
     this.router.navigate(['/login']);
     return { data, error };
   }

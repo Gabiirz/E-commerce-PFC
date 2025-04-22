@@ -5,6 +5,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MainComponent } from './components/main/main.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { filter, pairwise } from 'rxjs';
+import { ProductService } from './service/productService/product.service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,11 @@ import { filter, pairwise } from 'rxjs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  
+  constructor(private productService: ProductService) {}
+
+ngOnInit() {
+  /*this.productService.migrateProductsToSupabase();*/
+}
 
 }
 

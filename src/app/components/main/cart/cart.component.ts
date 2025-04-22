@@ -16,6 +16,7 @@ export default class CartComponent {
   state = inject(CartStateService).state;
 
   onRemove(id: number){
+    
     this.state.remove(id);
   }
 
