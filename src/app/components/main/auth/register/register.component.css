@@ -1,0 +1,114 @@
+video.background-video {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100vw;
+    min-height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+  }
+  /* Establecemos el fondo */
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    width: 100%;
+    background-size: cover;
+  }
+  
+  /* Contenedor principal */
+  div.flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 1.5rem;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  /* Estilo para el formulario */
+  .w-full {
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Títulos */
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+  }
+  
+  /* Estilo de los inputs */
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    background-color: #fff;
+    font-size: 1rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  input:focus {
+    border-color: #34D399; /* Verde */
+  }
+  
+  /* Botón de enviar */
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #34D399; /* Verde */
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #059669; /* Verde más oscuro */
+  }
+  
+  /* Enlace de "registrarse" */
+  p a {
+    color: #34D399; /* Verde */
+    font-weight: 600;
+    text-decoration: none;
+    transition: text-decoration 0.3s ease;
+  }
+  
+  p a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Opcional: Fondo oscuro para la parte interna del formulario */
+  .w-full {
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo más oscuro para el formulario */
+  }
+  
+  .w-full input {
+    background-color: transparent;
+    border: 2px solid #D1D5DB;
+    color: #333;
+  }
+  
+  .w-full input:focus {
+    border-color: #34D399;
+  }
+  
+  .w-full button {
+    background-color: #34D399;
+  }
+  
+  .w-full button:hover {
+    background-color: #059669;
+  }

@@ -1,8 +1,20 @@
 <nav class="navbar">
     <div class="container">
-      <div  class="nav-links logo">
-        <button>🛒 MyStore</button>
+
+
+
+      
+     <div  class="newLogo">
+        <div class="sun"></div>
+          <div class="orbit earth">
+            <div class="globe earth">
+                <div class="orbit moon">
+                  <div class="globe moon"></div>
+                </div>
+            </div>
+          </div>
       </div>
+      
   
       <ul class="nav-links" *ngIf="userLoggedIn; else guestView">
         <li><a routerLink="/products" routerLinkActive="!text-green-500" [routerLinkActiveOptions]="{exact: true}" >Home</a></li>

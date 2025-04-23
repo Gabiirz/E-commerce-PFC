@@ -75,8 +75,8 @@ export class CartStateService{
                products: [...state().products,{...product,quantity: 1}],
             };
         }
-
         isInCart.quantity += 1;
+        this.updateCartQuantity(product.product, isInCart.quantity); // Actualizar cantidad en la base de datos
         return{
             products: [...state().products],
         }
