@@ -1,0 +1,15 @@
+/* src/app/components/footer/footer.component.css */
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0; /* Add padding above and below */
+  margin-top: 40px; /* Add some space above the footer */
+  background-color: #f8f8f8; /* Light background color */
+  color: #555; /* Darker text color for contrast */
+}
+
+footer p {
+  font-size: 0.9em; /* Slightly smaller font size for paragraphs */
+}

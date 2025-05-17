@@ -20,7 +20,7 @@
         </button>
       </div>
       <div class="text-end md:order-4 md:w-32">
-        <p class="text-base font-bold text-gray-900 dark:text-white">{{productCartItem().product.price | currency}}</p>
+ <p class="text-base font-bold text-gray-900 dark:text-white">{{productCartItem().product.price * productCartItem().quantity | currency}}</p>
       </div>
     </div>
 

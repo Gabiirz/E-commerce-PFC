@@ -13,6 +13,7 @@
         }
 
         @default{
+            
             <div class="flex justify-end my-6">
                 <button type="button" 
                 (click)="changePage()"
@@ -25,9 +26,10 @@
     
                 @for(product of productsState.state().products; track product){
                     <app-product-card class="block" [product] = "product" (addToCart)="addToCart($event)" /> 
-                };
-            
+                }
             </div>
+
+            
         }
     }
   

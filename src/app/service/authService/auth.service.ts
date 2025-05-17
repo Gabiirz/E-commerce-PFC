@@ -10,6 +10,7 @@ export class AuthService {
   private loggedIn$ = new BehaviorSubject<boolean>(false);
 
   constructor(private supabaseService: SupabaseService, private router: Router) {
+    console.log('AuthService initialized');
     this.checkSession(); // Al iniciar el servicio, comprobamos si hay sesión activa
   }
 
@@ -19,7 +20,7 @@ export class AuthService {
   }
 
   async checkSession() {
-    const { data } = await this.supabaseService.auth.getUser();
+    const { data } = await this.supabaseService.auth.getUser().catch(() => ({ data: null })); // Catch potential errors like 403 when no user is logged in
     this.loggedIn$.next(!!data?.user);
   }
 
