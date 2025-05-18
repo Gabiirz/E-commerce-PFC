@@ -7,39 +7,36 @@ import { catchError, map, of, startWith, Subject, switchMap } from "rxjs";
 interface State{
     products: Product[];
     status: 'loading' | 'sucess' | 'error';
-    page:number;
+    page: number;
 }
 
-export class ProductStateService{
+export class ProductStateService {
     private productService = inject(ProductService);
     private initialState: State = {
-        products:[],
-        status:'loading' as const,
-        page:1,
-      };
+        products: [],
+        status: 'loading' as const,
+        page: 1,
+    };
 
-      changePage$ = new Subject<number>();
+    changePage$ = new Subject<number>();
 
-      loadProducts$ = this.changePage$.pipe(
+    loadProducts$ = this.changePage$.pipe(
         startWith(1),
-        switchMap((page) => this.productService.getProducts(page)),
-        map((products)=>({products,status:'sucess' as const})),
-        catchError(() => {
-          return of({
-            products: [],
-            status: 'error' as const,
-          });
-        })
-      );
+        // Aquí usamos Supabase en vez de la API externa
+        switchMap(() =>
+            this.productService.getProductsSupa()
+                .then(products => ({ products, status: 'sucess' as const }))
+                .catch(() => ({ products: [], status: 'error' as const }))
+        )
+    );
 
-      state = signalSlice({
+    state = signalSlice({
         initialState: this.initialState,
-        sources:[
+        sources: [
             this.changePage$.pipe(
-              map((page) => ({ page, status: 'loading' as const})),
+                map((page) => ({ page, status: 'loading' as const })),
             ),
             this.loadProducts$
         ],
-      });
-
+    });
 }

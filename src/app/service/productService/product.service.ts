@@ -16,7 +16,6 @@ export class ProductService extends BaseHttpService{
   }
   
 
-
   getProducts(page:number):Observable<Product[]>{
     return this.http.get<any[]>(`${this.apiUrl}/products`,{
       params:{
@@ -25,9 +24,32 @@ export class ProductService extends BaseHttpService{
     });
   }
 
-  getProduct(id:string): Observable<Product>{
-    return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
+  async getProduct(id: string): Promise<Product> {
+    const { data, error } = await this.supabaseService.supabase
+      .from('productos')
+      .select('*')
+      .eq('id', id)
+      .single();
+  
+    if (error || !data) {
+      throw new Error('Producto no encontrado');
+    }
+  
+    return {
+      id: data.id,
+      title: data.nombre,
+      description: data.descripcion,
+      price: data.precio,
+      image: data.imagen_url,
+      category: data.categoria ?? 'general',
+      rating: {
+        rate: 5,
+        count: 10,
+      }
+    };
   }
+  
+  
 
 /*----*/
 
@@ -54,11 +76,6 @@ console.log('✅ Producto insertado con id:', insertedProduct.id);
 
 }
 
-
-
-
-
-
 async getProductsSupa(): Promise<Product[]> {
   const { data, error } = await this.supabaseService.supabase
     .from('productos')
@@ -68,8 +85,20 @@ async getProductsSupa(): Promise<Product[]> {
     throw error;
   }
 
-  return data as Product[];
+  return data.map((p: any) => ({
+    id: p.id,
+    title: p.nombre,
+    description: p.descripcion,
+    price: p.precio,
+    image: p.imagen_url,
+    category: p.categoria || 'general', // puedes ajustar esto si lo agregas a tu tabla
+    rating: {
+      rate: 5,
+      count: 10
+    } // valor por defecto
+  })) as Product[];
 }
+
 async getProductSupa(id: string): Promise<Product | null> {
   const { data, error } = await this.supabaseService.supabase
     .from('productos')
