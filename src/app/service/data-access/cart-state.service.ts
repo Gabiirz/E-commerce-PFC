@@ -208,56 +208,23 @@ export class CartStateService {
         const productoId = product.id;
     
         try {
-            // Verificamos si ya existe el producto en el carrito
-            const { data: existingItems, error: existingItemsError } = await this._supabaseService.supabase
-                .from('carrito')
-                .select('id, cantidad')
-                .eq('usuario_id', userId)
-                .eq('producto_id', productoId);
+            const { error } = await this._supabaseService.supabase
+                .rpc('incrementar_cantidad_carrito', {
+                    usuario_id_input: userId,
+                    producto_id_input: productoId,
+                    cantidad_a_sumar: quantity
+                });
     
-            if (existingItemsError) {
-                console.error('❌ Error verificando producto existente en carrito:', existingItemsError.message);
-                return;
-            }
-    
-            const existingItem = existingItems?.[0];
-    
-            if (existingItem) {
-                // Producto ya existe → actualizamos cantidad acumulada
-                const nuevaCantidad = existingItem.cantidad + quantity;
-    
-                const { error: updateError } = await this._supabaseService.supabase
-                    .from('carrito')
-                    .update({ cantidad: nuevaCantidad })
-                    .eq('usuario_id', userId)
-                    .eq('producto_id', productoId);
-    
-                if (updateError) {
-                    console.error('❌ Error actualizando cantidad en carrito:', updateError.message);
-                } else {
-                    console.log('✅ Cantidad actualizada correctamente en Supabase');
-                }
-    
+            if (error) {
+                console.error('❌ Error al ejecutar RPC incrementar_cantidad_carrito:', error.message);
             } else {
-                // Producto no existe → insertamos
-                const { error: insertError } = await this._supabaseService.supabase
-                    .from('carrito')
-                    .insert([{
-                        usuario_id: userId,
-                        producto_id: productoId,
-                        cantidad: quantity,
-                    }]);
-    
-                if (insertError) {
-                    console.error('❌ Error insertando producto en carrito:', insertError.message);
-                } else {
-                    console.log('✅ Producto insertado correctamente en Supabase');
-                }
+                console.log('✅ Producto añadido o actualizado correctamente con RPC');
             }
         } catch (e) {
-            console.error('❌ Error inesperado en addToCart:', e);
+            console.error('❌ Error inesperado en addToCart con RPC:', e);
         }
     }
+    
     
 
     private async updateCartQuantity(productoId: number, quantity: number) {
