@@ -2,7 +2,8 @@ import { Component, inject, computed } from '@angular/core';
 import { CartStateService } from '../../../service/data-access/cart-state.service';
 import { CartItemComponent } from './ui/cart-item/cart-item.component';
 import { ProductItemCart } from '../../../interfaces/product.interface';
-import { CurrencyPipe, NgIf, NgForOf, AsyncPipe } from '@angular/common';
+import { CurrencyPipe, NgIf, NgForOf, AsyncPipe, CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 
 @Component({
@@ -11,6 +12,8 @@ import { CurrencyPipe, NgIf, NgForOf, AsyncPipe } from '@angular/common';
   imports: [
     CartItemComponent,
     CurrencyPipe,
+    CommonModule, 
+    RouterModule
   ],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'

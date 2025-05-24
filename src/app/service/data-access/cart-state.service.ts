@@ -172,6 +172,15 @@ export class CartStateService {
                             return { ...currentState, products: updatedProducts };
                         })
                     ),
+
+                clear: (state, action$: Observable<void>) =>
+                        action$.pipe(
+                            map(() => ({
+                                ...state(),
+                                products: []
+                            }))
+                        ),
+                    
                 
                 
         },
@@ -228,7 +237,9 @@ export class CartStateService {
     
 
     private async updateCartQuantity(productoId: number, quantity: number) {
-        const { data: userData } = await this._supabaseService.auth.getUser();
+
+        
+              const { data: userData } = await this._supabaseService.auth.getUser();
         const userId = userData?.user?.id;
     
         if (!userId) return;
@@ -241,6 +252,39 @@ export class CartStateService {
             .update({ cantidad: currentQuantity }) // usamos valor local más reciente
             .eq('usuario_id', userId)
             .eq('producto_id', productoId);
+            
+            // Dentro de la clase CartStateService
+
+          
+  
+    }
+   
+  
+
+
+
+    async clearCartInDatabase() {
+        const { data: userData } = await this._supabaseService.auth.getUser();
+        const userId = userData?.user?.id;
+      
+        if (!userId) return;
+      
+        await this._supabaseService.supabase
+          .from('carrito')
+          .delete()
+          .eq('usuario_id', userId);
+      }      
+    clearCart() {
+        this.state.clear(); // Esto dispara la acción
     }
     
-}
+      
+      
+      
+      
+
+
+
+    
+    
+} 
