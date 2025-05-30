@@ -55,6 +55,7 @@ export class AuthService {
   async signOut() {
     await this.supabaseService.auth.signOut();
     this.loggedIn$.next(false);
+    localStorage.removeItem('isAdmin');  // <--- esto
     this.router.navigate(['/login']);
   }
   
@@ -63,6 +64,9 @@ export class AuthService {
 
     return data?.user?.email ?? null;
   }
+
+   
+
 
 }
 

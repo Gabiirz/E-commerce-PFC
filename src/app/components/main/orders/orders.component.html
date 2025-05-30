@@ -1,0 +1,68 @@
+<section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+  <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
+    <!-- Loop through each order in the 'pedido' array -->
+    <div *ngFor="let order of pedido">
+      <!-- Muestra el ID del pedido. Ajusta 'order.id' según la propiedad real en tus datos -->
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Pedido ID: {{ order.id }}</h2>
+
+      <div class="mt-6 sm:mt-8 lg:flex lg:gap-8">
+        <div class="w-full divide-y divide-gray-200 overflow-hidden rounded-lg border border-gray-200 dark:divide-gray-700 dark:border-gray-700 lg:max-w-xl xl:max-w-2xl">
+          <!-- Loop through each item in 'detallepedido'. Asegúrate de que 'order.detallepedido' es la propiedad correcta -->
+          <div class="space-y-4 p-6" *ngFor="let item of order.detallepedido">
+            <div class="flex items-center gap-6">
+              <a href="#" class="h-14 w-14 shrink-0">
+                <!-- Bind product image using [src]. Accede a la URL a través de item.producto.imagen_url -->
+                <img class="h-full w-full dark:hidden" [src]="item.producto?.imagen_url" [alt]="item.producto?.nombre" />
+                <!-- Si tienes una imagen para modo oscuro, puedes usarla aquí -->
+                <!-- <img class="hidden h-full w-full dark:block" [src]="item.producto?.imagen_url_dark" [alt]="item.producto?.nombre" /> -->
+              </a>
+
+              <!-- Bind product name. Accede al nombre a través de item.producto.nombre -->
+              <a href="#" class="min-w-0 flex-1 font-medium text-gray-900 hover:underline dark:text-white">{{ item.producto?.nombre }}</a>
+            </div>
+
+            <div class="flex items-center justify-between gap-4">
+              <!-- Bind product ID. Asegúrate de que item.producto_id o item.producto?.id contiene el ID del producto -->
+              <p class="text-sm font-normal text-gray-500 dark:text-gray-400"><span class="font-medium text-gray-900 dark:text-white">Product ID:</span> {{ item.producto?.id || item.producto_id }}</p>
+
+              <div class="flex items-center justify-end gap-4">
+                <!-- Bind product quantity from detallepedido -->
+                <p class="text-base font-normal text-gray-900 dark:text-white">x{{ item.cantidad }}</p>
+
+                <!-- Bind product price from detallepedido -->
+                <p class="text-xl font-bold leading-tight text-gray-900 dark:text-white">${{ item.precio_unitario }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- La sección del resumen del pedido (precios, total) puede ir aquí, fuera del loop de productos -->
+          <div class="space-y-4 bg-gray-50 p-6 dark:bg-gray-800">
+            <div class="space-y-2">
+              <!-- Asegúrate de que estas propiedades existan en el objeto 'order' -->
+              <dl class="flex items-center justify-between gap-4">
+                <dt class="font-normal text-gray-500 dark:text-gray-400">Precio original</dt>
+                <dd class="font-medium text-gray-900 dark:text-white">${{ order.precio_original }}</dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4">
+                <dt class="font-normal text-gray-500 dark:text-gray-400">Descuento</dt>
+                <dd class="text-base font-medium text-green-500">-${{ order.descuento | number:'1.2-2' }}</dd>
+              </dl>
+
+              <dl class="flex items-center justify-between gap-4">
+                <dt class="font-normal text-gray-500 dark:text-gray-400">Iva</dt>
+                <dd class="font-medium text-gray-900 dark:text-white">+${{ order.iva | number:'1.2-2' }}</dd>
+              </dl>
+            </div>
+
+            <!-- Asegúrate de que order.total existe -->
+            <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
+              <dt class="text-lg font-bold text-gray-900 dark:text-white">Total</dt>
+              <dd class="text-lg font-bold text-gray-900 dark:text-white">${{ order.total }}</dd>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

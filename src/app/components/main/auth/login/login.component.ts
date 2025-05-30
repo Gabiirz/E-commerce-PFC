@@ -23,7 +23,8 @@ export class LoginComponent {
     password: new FormControl<any>('', [Validators.required])
   });
 
-  onSubmit() {
+  async onSubmit() {
+  
    this.authService.logIn(this.loginForm.value.email, this.loginForm.value.password)
    .then ((resp: any) => {
     console.log(resp)

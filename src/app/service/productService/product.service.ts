@@ -41,6 +41,7 @@ export class ProductService extends BaseHttpService{
       description: data.descripcion,
       price: data.precio,
       image: data.imagen_url,
+      quantity: data.quantity,
       category: data.categoria ?? 'general',
       rating: {
         rate: 5,

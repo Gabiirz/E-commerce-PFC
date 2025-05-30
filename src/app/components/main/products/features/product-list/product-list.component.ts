@@ -3,16 +3,23 @@ import { ProductStateService } from '../../../../../service/productService/produ
 import { ProductCardComponent } from '../../ui/product-card/product-card.component';
 import { CartStateService } from '../../../../../service/data-access/cart-state.service';
 import { Product } from '../../../../../interfaces/product.interface';
-
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../../../../service/authService/auth.service';
+import { Router, RouterModule } from '@angular/router';
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [ProductCardComponent],
+  imports: [ProductCardComponent, CommonModule, RouterModule],
   templateUrl: './product-list.component.html',
   styles: ``,
   providers:[ProductStateService]
 })
 export default class ProductListComponent {
+  private authService = inject(AuthService);
+  isAdmin = false;
+
+  constructor(private router: Router) {}
+
   productsState = inject(ProductStateService);
   cartState = inject(CartStateService).state;
 
@@ -27,5 +34,12 @@ export default class ProductListComponent {
       quantity: 1,
     });
   }
+
+  goToAdmin() {
+    console.log('🔐 Botón administrador clicado');
+    console.log('isAdmin en localStorage:', localStorage.getItem('isAdmin'));
+    this.router.navigate(['/admin']);
+  }
+
 
 }

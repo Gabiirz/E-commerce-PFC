@@ -15,10 +15,6 @@ import { CartStateService } from '../../service/data-access/cart-state.service';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   cartState = inject(CartStateService).state; // aseguramos que se cree 1 sola vez
- 
-
-
-
   userLoggedIn = false;
   isDropdownOpen = false;
   userEmail: string | null = null;
@@ -31,6 +27,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     
     this.authSub = this.authService.isLoggedIn$.subscribe(async (loggedIn) => {
       this.userLoggedIn = loggedIn;
+
+
+
       if (loggedIn) {
         this.userEmail = await this.authService.getCurrentUserEmail();
       } else {
