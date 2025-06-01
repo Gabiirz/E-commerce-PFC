@@ -18,6 +18,10 @@ export class LoginComponent {
   
   constructor(private authService: AuthService, private router: Router) {}
 
+
+  correoNoVerificado: boolean = false;
+
+
   loginForm = new FormGroup({
     email: new FormControl<any>('', [Validators.required, Validators.email]),
     password: new FormControl<any>('', [Validators.required])
@@ -28,10 +32,22 @@ export class LoginComponent {
    this.authService.logIn(this.loginForm.value.email, this.loginForm.value.password)
    .then ((resp: any) => {
     console.log(resp)
-    if(resp.data.user.role === "authenticated"){
-      
-      this.router.navigate(['products'])
 
+    if (resp.error) {
+      if (resp.error.message.includes('Email not confirmed')) {
+        this.correoNoVerificado = true;
+        return; // salir para que no haga más nada
+      } else {
+        console.error('Error al iniciar sesión:', resp.error.message);
+        return;
+      }
+    }
+
+    
+    if(resp.data.user.user_metadata?.role === "admin"){
+      this.router.navigate(['products']); // O la ruta para admins que tengas
+    } else if(resp.data.user.role === "authenticated") {
+      this.router.navigate(['products']);
     }
    })
    .catch((err: any) =>{

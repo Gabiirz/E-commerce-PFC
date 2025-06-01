@@ -20,7 +20,12 @@
             <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Correo electrónico</label>
             <input formControlName="email" type="email" name="email" id="email"
               class="block w-full px-4 py-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="ejemplo@ejemplo.com" />
-          </div>
+              <div *ngIf="correoNoVerificado" class="mt-2 text-sm text-yellow-600 dark:text-yellow-400">
+                📧 Tu correo aún no está verificado. Revisa tu bandeja de entrada y haz clic en el enlace de confirmación.
+              </div>
+              
+          
+            </div>
   
           <div>
             <label for="password" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Contraseña</label>

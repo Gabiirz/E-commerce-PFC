@@ -23,18 +23,76 @@
             <label for="email" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Correo electrónico</label>
             <input formControlName="email" type="email" name="email" id="email"
               class="block w-full px-4 py-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="ejemplo@ejemplo.com" />
+              <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="text-red-600 text-sm">
+                <div *ngIf="registerForm.get('email')?.errors?.['required']">El correo es obligatorio.</div>
+              </div>
+              
+            
           </div>
   
           <div>
-            <label for="password" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Contraseña</label>
+            <label for="password" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Contraseña
+
+              <div class="relative group inline-block">
+                <button
+                  type="button"
+                  class="text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white"
+                  aria-describedby="password-desc"
+                >
+                  <svg
+                    class="h-4 w-4"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </button>
+              
+                <!-- Tooltip explicativo para la contraseña -->
+                <div
+                  id="password-desc"
+                  role="tooltip"
+                  class="pointer-events-none invisible absolute left-1/2 -translate-x-1/2 top-full mt-2 w-max rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700 group-hover:visible group-hover:opacity-100"
+                  style="z-index: 9999;"
+                >
+                  Usa al menos 8 caracteres, con letras y almenos un número.
+                  <div class="tooltip-arrow" data-popper-arrow></div>
+                </div>
+              </div>
+
+            </label>
             <input formControlName="password" type="password" name="password" id="password"
               class="block w-full px-4 py-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Tu contraseña" />
+              <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="text-red-600 text-sm">
+                <div *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</div>
+                <div *ngIf="registerForm.get('password')?.errors?.['minlength']">Mínimo 8 caracteres.</div>
+                <div *ngIf="registerForm.get('password')?.errors?.['maxlength']">Máximo 32 caracteres.</div>
+                <div *ngIf="registerForm.get('password')?.errors?.['pattern']">Debe incluir mínimo un número.</div>
+              </div>
+
+              
           </div>
+
+            <div>
+              <label for="confirmPassword" class="block mb-2 text-sm text-gray-600 dark:text-gray-200">Confirma contraseña</label>
+              <input formControlName="confirmPassword" type="password" name="confirmPassword" id="confirmPassword"
+                class="block w-full px-4 py-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Tu contraseña" />
+                <div *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.hasError('passwordMismatch')" class="text-red-600 text-sm">
+                  Las contraseñas no coinciden.
+                </div>
+              </div>
+
   
           <div>
             <button
               class="w-full px-4 py-2 tracking-wide text-white bg-blue-500 rounded-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-300">
-              Iniciar sesión
+            Registrarse
             </button>
           </div>
         </form>

@@ -1,4 +1,5 @@
 <section *ngIf="!mostrarFormulario" class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
+
   <form [formGroup]="checkoutForm" class="mx-auto max-w-screen-xl px-4 2xl:px-0">
       <ol class="items-center flex w-full max-w-2xl text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
         <li class="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
@@ -10,12 +11,15 @@
           </span>
         </li>
   
+
+     
+
         <li class="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
           <span class="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden">
             <svg class="me-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
             </svg>
-            Verificar
+            Detalles
           </span>
         </li>
   
@@ -23,7 +27,7 @@
           <svg class="me-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
-          Resumen del pedido
+          Pago
         </li>
       </ol>
   
@@ -33,14 +37,23 @@
             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Detalles de la entrega</h2>
   
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div>
+              <div >
                 <label for="your_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Tu nombre </label>
                 <input type="text" id="your_name" name="nombre" formControlName="nombre" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Bonnie Green" required />
+                <div *ngIf="checkoutForm.get('nombre')?.touched && checkoutForm.get('nombre')?.invalid" class="text-red-600 text-sm">
+                  <div *ngIf="checkoutForm.get('nombre')?.errors?.['required']">El nombre es obligatorio.</div>
+                  <div *ngIf="checkoutForm.get('nombre')?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres.</div>
+                </div>
               </div>
   
               <div>
                 <label for="your_email" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Tu correo </label>
                 <input type="email" id="your_email" name="email" formControlName="email" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="name@flowbite.com" required />
+                <div *ngIf="checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid" class="text-red-600 text-sm">
+                  <div *ngIf="checkoutForm.get('email')?.errors?.['required']">El correo es obligatorio.</div>
+                  <div *ngIf="checkoutForm.get('email')?.errors?.['email']">Formato de correo inválido.</div>
+                  <div *ngIf="checkoutForm.get('email')?.errors?.['pattern']">Pon un correo verídico</div>
+                </div>
               </div>
   
               <div>
@@ -54,6 +67,11 @@
                   <option value="ES">Spain</option>
                   <option value="UK">United Kingdom</option>
                 </select>
+
+              <div *ngIf="checkoutForm.get('direccion_pais')?.touched && checkoutForm.get('direccion_pais')?.invalid" class="text-red-600 text-sm">
+                <div *ngIf="checkoutForm.get('direccion_pais')?.errors?.['required']">El país es obligatorio.</div>
+              </div>
+
               </div>
   
               <div>
@@ -63,6 +81,11 @@
                 <input type="text" id="select-city-input-3" formControlName="direccion_ciudad"
                     class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
                     placeholder="Introduce tu ciudad" required />
+                <div *ngIf="checkoutForm.get('direccion_ciudad')?.touched && checkoutForm.get('direccion_ciudad')?.invalid" class="text-red-600 text-sm">
+                  <div *ngIf="checkoutForm.get('direccion_ciudad')?.errors?.['required']">La ciudad es obligatoria.</div>
+                  <div *ngIf="checkoutForm.get('direccion_ciudad')?.errors?.['pattern']">La ciudad solo puede contener letras y espacios.</div>
+                </div>
+
               </div>
   
               <div>
@@ -97,6 +120,12 @@
                     required
                   />
                 </div>
+
+                <div *ngIf="checkoutForm.get('telefono')?.touched && checkoutForm.get('telefono')?.invalid" class="text-red-600 text-sm">
+                  <div *ngIf="checkoutForm.get('telefono')?.errors?.['required']">El teléfono es obligatorio.</div>
+                  <div *ngIf="checkoutForm.get('telefono')?.errors?.['pattern']">El teléfono debe contener al menos 9 dígitos y solo números.</div>
+                </div>
+
               
                 <!-- Dropdown de prefijos -->
                 <div *ngIf="mostrarDropdown" class="z-10 mt-2 w-56 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700">
@@ -158,8 +187,14 @@
               
                     required
                   />
+
+               
+
                 </div>
-              
+               <div *ngIf="checkoutForm.get('direccion_calle')?.touched && checkoutForm.get('direccion_calle')?.invalid" class="text-red-600 text-sm">
+                  <div *ngIf="checkoutForm.get('direccion_calle')?.errors?.['required']">La dirección es obligatoria.</div>
+                  <div *ngIf="checkoutForm.get('direccion_calle')?.errors?.['pattern']">Dirección inválida.</div>
+                </div>
                 
               </div>
 
@@ -181,8 +216,14 @@
               
                     required
                   />
+
+                
+
                 </div>
-              
+              <div *ngIf="checkoutForm.get('codigo_postal')?.touched && checkoutForm.get('codigo_postal')?.invalid" class="text-red-600 text-sm">
+                  <div *ngIf="checkoutForm.get('codigo_postal')?.errors?.['required']">El código postal es obligatorio.</div>
+                  <div *ngIf="checkoutForm.get('codigo_postal')?.errors?.['pattern']">Código postal inválido. Debe tener 5 dígitos.</div>
+                </div>
                 
               </div>
               
@@ -235,7 +276,8 @@
                   <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
                     <div class="flex items-start">
                       <div class="flex h-5 items-center">
-                        <input id="dhl" aria-describedby="dhl-text" type="radio" name="metodo_entrega" value="dhl" formControlName="metodo_entrega" class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" checked />
+                        <input   [checked]="metodoEntrega() === 'rapida'"
+                        (change)="setMetodoEntrega('rapida')" id="dhl" aria-describedby="dhl-text" type="radio" name="metodo_entrega" value="dhl" formControlName="metodo_entrega" class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" checked />
                       </div>
                       <div class="ms-4 text-sm">
                         <label for="dhl" class="font-medium leading-none text-gray-900 dark:text-white">+$15 - Entrega rápida</label>
@@ -247,7 +289,8 @@
                   <div class="rounded-lg border border-gray-200 bg-gray-50 p-4 ps-4 dark:border-gray-700 dark:bg-gray-800">
                     <div class="flex items-start">
                       <div class="flex h-5 items-center">
-                        <input id="fedex" aria-describedby="fedex-text" type="radio" name="metodo_entrega" value="fedex" formControlName="metodo_entrega" class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
+                        <input  [checked]="metodoEntrega() === 'gratuita'"
+                        (change)="setMetodoEntrega('gratuita')" id="fedex" aria-describedby="fedex-text" type="radio" name="metodo_entrega" value="fedex" formControlName="metodo_entrega" class="h-4 w-4 border-gray-300 bg-white text-primary-600 focus:ring-2 focus:ring-primary-600 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
                       </div>
                       <div class="ms-4 text-sm">
                         <label for="fedex" class="font-medium leading-none text-gray-900 dark:text-white">Entrega gratuita</label>
@@ -334,6 +377,11 @@
                 </dl>
       
                 <dl class="flex items-center justify-between gap-4 py-3">
+                  <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Entrega</dt>
+                  <dd class="text-base font-medium text-gray-900 dark:text-white">  {{ costeEntrega() === 0 ? 'Gratis' : (costeEntrega() | currency) }}</dd>
+                </dl>
+
+                <dl class="flex items-center justify-between gap-4 py-3">
                   <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
                   <dd class="text-base font-bold text-gray-900 dark:text-white">{{ total() | currency }}</dd>
                 </dl>
@@ -358,6 +406,35 @@
 
               <section *ngIf="mostrarFormulario" class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
                 
+                <ol class="items-center flex w-full max-w-2xl mx-auto text-center text-sm font-medium text-gray-500 dark:text-gray-400 sm:text-base">
+                  <li class="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
+                    <span class="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden">
+                      <svg class=" text-green-500 me-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg >
+                      Carro
+                    </span>
+                  </li>
+            
+          
+               
+          
+                  <li class="after:border-1 flex items-center text-primary-700 after:mx-6 after:hidden after:h-1 after:w-full after:border-b after:border-gray-200 dark:text-primary-500 dark:after:border-gray-700 sm:after:inline-block sm:after:content-[''] md:w-full xl:after:mx-10">
+                    <span class="flex items-center after:mx-2 after:text-gray-200 after:content-['/'] dark:after:text-gray-500 sm:after:hidden">
+                      <svg class="me-2 h-4 w-4 sm:h-5 sm:w-5 text-green-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                      </svg>
+                      Detalles
+                    </span>
+                  </li>
+            
+                  <li class="flex shrink-0 items-center">
+                    <svg class="me-2 h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Pago
+                  </li>
+                </ol>
 
                 <section class="bg-white py-8 antialiased dark:bg-gray-900 md:py-16">
                   <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
@@ -368,13 +445,21 @@
                         <form [formGroup]="checkoutForm" class="w-full rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:p-6 lg:max-w-xl lg:p-8">
                           <div class="mb-6 grid grid-cols-2 gap-4">
                             <div class="col-span-2 sm:col-span-1">
-                              <label for="full_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Nombre completo (de tu targeta de credito) </label>
+                              <label for="full_name" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Nombre completo (de tu targeta) </label>
                               <input formControlName="nombre_tarjeta" name="nombre_tarjeta" type="text" id="full_name" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="Bonnie Green" />
+                              <div *ngIf="checkoutForm.get('nombre_tarjeta')?.touched && checkoutForm.get('nombre_tarjeta')?.invalid" class="text-red-600 text-sm">
+                                <div *ngIf="checkoutForm.get('nombre_tarjeta')?.errors?.['required']">El nombre en la tarjeta es obligatorio.</div>
+                                <div *ngIf="checkoutForm.get('nombre_tarjeta')?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres.</div>
+                              </div>
                             </div>
                 
                             <div class="col-span-2 sm:col-span-1">
                               <label for="card-number-input" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Número de la tageta de credito </label>
                               <input formControlName="numero_tarjeta" placeholder="xxxx-xxxx-xxxx-xxxx" type="text" id="card-number-input" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pe-10 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500  dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="xxxx-xxxx-xxxx-xxxx" pattern="^4[0-9]{12}(?:[0-9]{3})?$"  />
+                              <div *ngIf="checkoutForm.get('numero_tarjeta')?.touched && checkoutForm.get('numero_tarjeta')?.invalid" class="text-red-600 text-sm">
+                                <div *ngIf="checkoutForm.get('numero_tarjeta')?.errors?.['required']">El número de tarjeta es obligatorio.</div>
+                                <div *ngIf="checkoutForm.get('numero_tarjeta')?.errors?.['pattern']">El número debe tener 16 dígitos numéricos.</div>
+                              </div>
                             </div>
                 
                             <div>
@@ -391,22 +476,67 @@
                                 </div>
                                 <input formControlName="fecha_expiracion_tarjeta" placeholder="mm/yy" datepicker datepicker-format="mm/yy" id="card-expiration-input" type="text" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 ps-9 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" placeholder="12/23"  />
                               </div>
+                              <div *ngIf="checkoutForm.get('fecha_expiracion_tarjeta')?.touched && checkoutForm.get('fecha_expiracion_tarjeta')?.invalid" class="text-red-600 text-sm">
+                                <div *ngIf="checkoutForm.get('fecha_expiracion_tarjeta')?.errors?.['required']">La fecha de vencimiento es obligatoria.</div>
+                                <div *ngIf="checkoutForm.get('fecha_expiracion_tarjeta')?.errors?.['fechaValida']">La fecha de vencimiento debe ser futura.</div>
+                              </div>
                             </div>
                             <div>
                               <label for="cvv-input" class="mb-2 flex items-center gap-1 text-sm font-medium text-gray-900 dark:text-white">
                                 CVV
-                                <button data-tooltip-target="cvv-desc" data-tooltip-trigger="hover" class="text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white">
-                                  <svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z" clip-rule="evenodd" />
-                                  </svg>
-                                </button>
-                                <div id="cvv-desc" role="tooltip" class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700">
-                                  Ultimos tres dígitos del reverso de la targeta
-                                  <div class="tooltip-arrow" data-popper-arrow></div>
+                            
+                                <!-- Contenedor con group sólo para el botón -->
+                                <div class="relative group inline-block">
+                                  <button
+                                    type="button"
+                                    class="text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white"
+                                    aria-describedby="cvv-desc"
+                                  >
+                                    <svg
+                                      class="h-4 w-4"
+                                      aria-hidden="true"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="currentColor"
+                                      viewBox="0 0 24 24"
+                                    >
+                                      <path
+                                        fill-rule="evenodd"
+                                        d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm9.408-5.5a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2h-.01ZM10 10a1 1 0 1 0 0 2h1v3h-1a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2h-1v-4a1 1 0 0 0-1-1h-2Z"
+                                        clip-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </button>
+                            
+                                  <!-- Tooltip dentro del mismo contenedor para que funcione group-hover -->
+                                  <div
+                                    id="cvv-desc"
+                                    role="tooltip"
+                                    class="pointer-events-none invisible absolute left-1/2 -translate-x-1/2 top-full mt-2 w-max rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700 group-hover:visible group-hover:opacity-100"
+                                    style="z-index: 9999;"
+                                  >
+                                    Últimos tres dígitos del reverso de la tarjeta
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                  </div>
                                 </div>
                               </label>
-                              <input placeholder="CVV" type="text" pattern="^[0-9]{3,4}$" maxlength="4" id="cvv-input" aria-describedby="helper-text-explanation" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500" placeholder="•••"  />
+                            
+                              <input
+                                placeholder="CVV"
+                                formControlName="cvv_tarjeta"
+                                type="text"
+                                pattern="^[0-9]{3,4}$"
+                                maxlength="4"
+                                id="cvv-input"
+                                aria-describedby="cvv-desc"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500"
+                              />
+
+                              <div *ngIf="checkoutForm.get('cvv_tarjeta')?.touched && checkoutForm.get('cvv_tarjeta')?.invalid" class="text-red-600 text-sm">
+                                <div *ngIf="checkoutForm.get('cvv_tarjeta')?.errors?.['required']">El CVV es obligatorio.</div>
+                                <div *ngIf="checkoutForm.get('cvv_tarjeta')?.errors?.['pattern']">El CVV debe contener 3 o 4 dígitos.</div>
+                              </div>
                             </div>
+                            
                           </div>
                 
                           <button 
@@ -422,29 +552,29 @@
                           <div class="space-y-4 rounded-lg border border-gray-100 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
                             <div class="space-y-2">
                               <dl class="flex items-center justify-between gap-4">
-                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Original price</dt>
-                                <dd class="text-base font-medium text-gray-900 dark:text-white">$6,592.00</dd>
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Precio original</dt>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white">{{ subtotal() | currency }}</dd>
                               </dl>
                 
                               <dl class="flex items-center justify-between gap-4">
-                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Savings</dt>
-                                <dd class="text-base font-medium text-green-500">-$299.00</dd>
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Descuento</dt>
+                                <dd class="text-base font-medium text-green-500">-{{ savings() | currency }}</dd>
                               </dl>
                 
                               <dl class="flex items-center justify-between gap-4">
-                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Store Pickup</dt>
-                                <dd class="text-base font-medium text-gray-900 dark:text-white">$99</dd>
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Iva</dt>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white">+{{ ivaPercent }}%</dd>
                               </dl>
-                
+
                               <dl class="flex items-center justify-between gap-4">
-                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Tax</dt>
-                                <dd class="text-base font-medium text-gray-900 dark:text-white">$799</dd>
+                                <dt class="text-base font-normal text-gray-500 dark:text-gray-400">Entrega</dt>
+                                <dd class="text-base font-medium text-gray-900 dark:text-white">+{{ costeEntrega() === 0 ? 'Gratis' : (costeEntrega() | currency) }}</dd>
                               </dl>
                             </div>
                 
                             <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
                               <dt class="text-base font-bold text-gray-900 dark:text-white">Total</dt>
-                              <dd class="text-base font-bold text-gray-900 dark:text-white">$7,191.00</dd>
+                              <dd class="text-base font-bold text-gray-900 dark:text-white">{{ total() | currency }}</dd>
                             </dl>
                           </div>
                 
@@ -462,14 +592,14 @@
                       <p class="mt-6 text-center text-gray-500 dark:text-gray-400 sm:mt-8 lg:text-left">
                         Payment processed by <a href="#" title="" class="font-medium text-primary-700 underline hover:no-underline dark:text-primary-500">Paddle</a> for <a href="#" title="" class="font-medium text-primary-700 underline hover:no-underline dark:text-primary-500">Flowbite LLC</a>
                         - United States Of America
-                      </p>
+                     </p>
                     </div>
                   </div>
                 </section>
                 
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/datepicker.min.js"></script>
-             
-
+              
+                
               </section>
       
   

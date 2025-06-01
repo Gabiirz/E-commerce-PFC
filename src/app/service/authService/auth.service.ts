@@ -14,48 +14,100 @@ export class AuthService {
     this.checkSession(); // Al iniciar el servicio, comprobamos si hay sesión activa
   }
 
-  // Exponemos el observable para suscribirse desde otros componentes
   get isLoggedIn$() {
     return this.loggedIn$.asObservable();
   }
 
-  async checkSession() {
-    const { data } = await this.supabaseService.auth.getUser().catch(() => ({ data: null })); // Catch potential errors like 403 when no user is logged in
-    this.loggedIn$.next(!!data?.user);
+
+  private user$ = new BehaviorSubject<any>(null);
+
+  get currentUser$() {
+    return this.user$.asObservable();
   }
+
+
+  async checkSession() {
+    const { data } = await this.supabaseService.auth.getUser().catch(() => ({ data: null }));
+    const user = data?.user;
+    this.loggedIn$.next(!!user);
+    this.user$.next(user || null); // ← Esta línea permite al guard ver el user y su role
+  }
+  
+
+  async getCurrentUserRole(): Promise<string | null> {
+    const result = await this.supabaseService.auth.getUser();
+    const user = result.data?.user;
+    return user?.user_metadata?.role ?? null;
+  }
+  
+  
+  
+
 
   async signUp(email: string, password: string) {
     const { data, error } = await this.supabaseService.auth.signUp({ email, password });
-    // 2. Si el usuario se ha registrado bien, insertamos en la tabla 'usuarios'
   const supabaseUser = data.user;
 
+  let insertError = null;
+
+
     if (supabaseUser) {
-    const { error: insertError } = await this.supabaseService.supabase
+      const insertResult = await this.supabaseService.supabase
       .from('usuarios')
       .insert([{
-        id: supabaseUser.id,           // mismo ID que en Supabase Auth
+        id: supabaseUser.id,          
         email: email,
-        password: password,          // ⚠️ Idealmente deberías cifrar esta contraseña
+        password: password,         
       }]);
 
-    if (insertError) {
-      console.error('Error insertando en tabla usuarios:', insertError);
-    }
-  }
-    this.router.navigate(['/login']);
-    return { data, error };
+      insertError = insertResult.error; // ✅ Aquí guardas el error correctamente
+
+
+      if (insertError) {
+        console.error('Error insertando en tabla usuarios:', insertError);
+      } 
+    }    return { data, error, insertError  };
   }
 
   async logIn(email: string, password: string) {
     const { data, error } = await this.supabaseService.auth.signInWithPassword({ email, password });
-    if (data?.user) this.loggedIn$.next(true);
-    return { data, error };
+  
+    if (error) {
+      console.error('❌ Error al iniciar sesión:', error.message);
+      return { data: null, error };
+    }
+  
+    const user = data.user;
+  
+    // ✅ Obtener el rol desde la tabla 'usuarios'
+    const { data: usuarioData, error: usuarioError } = await this.supabaseService.supabase
+      .from('usuarios')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+  
+    if (usuarioError) {
+      console.error('❌ Error al obtener rol del usuario:', usuarioError.message);
+    }
+  
+    // ✅ Asignar el rol (aunque sea en memoria)
+    user.user_metadata = {
+      ...user.user_metadata,
+      role: usuarioData?.role ?? 'user'
+    };
+  
+    // ✅ Actualizar estado global
+    this.loggedIn$.next(true);
+    this.user$.next(user);
+  
+    return { data: { user }, error: null };
   }
+  
+  
 
   async signOut() {
     await this.supabaseService.auth.signOut();
     this.loggedIn$.next(false);
-    localStorage.removeItem('isAdmin');  // <--- esto
     this.router.navigate(['/login']);
   }
   

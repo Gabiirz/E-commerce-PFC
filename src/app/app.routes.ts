@@ -4,9 +4,13 @@ import { RegisterComponent } from './components/main/auth/register/register.comp
 import { CheckoutComponent } from './components/main/checkout/checkout.component';
 import { OrdersComponent } from './components/main/orders/orders.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { EmailVerifiedComponent } from './email-verified/email-verified.component';
 
 
 export const routes: Routes = [
+{ path: 'email-verified', component: EmailVerifiedComponent },
+
+  
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
  

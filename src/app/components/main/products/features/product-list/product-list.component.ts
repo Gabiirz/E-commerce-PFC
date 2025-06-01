@@ -15,11 +15,23 @@ import { Router, RouterModule } from '@angular/router';
   providers:[ProductStateService]
 })
 export default class ProductListComponent {
+
   private authService = inject(AuthService);
+  
   isAdmin = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    
+  }
 
+  ngOnInit() {
+    this.authService.currentUser$.subscribe(user => {
+      const role = user?.user_metadata?.role;
+      console.log('Rol del usuario:', role);
+      this.isAdmin = role === 'admin'; // ✅ aquí activas el botón
+    });
+  }
+  
   productsState = inject(ProductStateService);
   cartState = inject(CartStateService).state;
 

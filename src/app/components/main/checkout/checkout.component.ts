@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { CartStateService } from '../../../service/data-access/cart-state.service';
 import { CheckoutService } from '../../../service/data-access/checkout.service';
 import { Router, RouterModule } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-checkout',
@@ -27,20 +28,28 @@ export class CheckoutComponent {
 
   savings = signal(0); // Señal para el monto del descuento aplicado
   ivaPercent = 0.21; // Porcentaje de IVA fijo
-
+  metodoEntrega = signal<'rapida' | 'gratuita'>('gratuita');
+  
   // Señal computada para el subtotal
   subtotal = computed(() => {
     const products = this.cartProducts();
     return products.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
   });
 
+  costeEntrega = computed(() => this.metodoEntrega() === 'rapida' ? 15 : 0);
+
+  setMetodoEntrega(metodo: 'rapida' | 'gratuita') {
+    this.metodoEntrega.set(metodo);
+  }
+
+
+
   // Señal computada para el total (incluyendo subtotal, descuento e IVA)
   total = computed(() => {
     const subtotalVal = this.subtotal();
     const savingsVal = this.savings();
-    // Calcular el monto real de IVA basado en el subtotal menos el descuento
     const iva = (subtotalVal - savingsVal) * this.ivaPercent;
-    return subtotalVal - savingsVal + iva;
+    return subtotalVal - savingsVal + iva + this.costeEntrega();
   });
 
   voucherError = false;
@@ -50,23 +59,57 @@ export class CheckoutComponent {
     this.checkoutForm = this.fb.group({
       telefono_prefijo: [this.prefijoSeleccionado, Validators.required],
       nombre: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      direccion_calle: ['', Validators.required],
-      direccion_ciudad: ['', Validators.required],
+      email: ['', [
+        Validators.required, 
+        Validators.email, 
+        Validators.pattern(/^[a-zA-Z0-9._%+-]+@(gmail\.com|hotmail\.com|yahoo\.es)$/)
+      ]],
+      direccion_calle: ['', [
+        Validators.required, 
+        Validators.pattern(/^[a-zA-Z0-9\s,'-]{5,}$/)
+      ]],
+    
+      direccion_ciudad: ['', [
+        Validators.required, 
+        Validators.pattern(/^[a-zA-Z\s]{2,}$/)
+      ]],
+
       direccion_pais: ['', Validators.required],
-      codigo_postal: ['', Validators.required],
+      codigo_postal: ['', [
+          Validators.required, 
+          Validators.pattern(/^\d{4,6}$/)
+        ]],
+        
       metodo_pago: ['', Validators.required],
       metodo_entrega: ['', Validators.required],
       telefono: ['', [Validators.required, Validators.pattern(/^\d{9,}$/)]],
       voucher: [''],
 
       // Campos de tarjeta con validadores
-      nombre_tarjeta: ['', Validators.required],
-      fecha_expiracion_tarjeta: ['', Validators.required],
-      //cvv_tarjeta: ['', [Validators.required, Validators.pattern(/^[0-9]{3,4}$/)]],
-      numero_tarjeta: ['', [Validators.required, Validators.pattern('^[0-9]{16}$')]]
+      nombre_tarjeta: ['', [Validators.required, Validators.minLength(3)]],
+      fecha_expiracion_tarjeta: ['', [Validators.required, this.validarFechaFutura.bind(this)]],
+      cvv_tarjeta: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
+      numero_tarjeta: ['', [Validators.required, Validators.pattern(/^\d{16}$/)]],
     });
   }
+  minMonth = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+
+  validarFechaFutura(control: AbstractControl) {
+
+    if (!control.value) return null;
+    // El input type="month" da valor en formato YYYY-MM
+    const [year, month] = control.value.split('-').map(Number);
+    const fecha = new Date(year, month - 1);
+    const ahora = new Date();
+    ahora.setDate(1); // solo mes y año
+    ahora.setHours(0, 0, 0, 0);
+    if (fecha < ahora) {
+      return { fechaValida: true };
+    }
+    return null;
+  }
+  
+
 
   ngOnInit(): void {
     this.mostrarFormulario = false;
@@ -74,7 +117,10 @@ export class CheckoutComponent {
     this.checkoutForm.reset({
       telefono_prefijo: this.prefijoSeleccionado
     });
+    
   }
+
+  
 
   seleccionarPrefijo(prefijo: string) {
     this.prefijoSeleccionado = prefijo;
@@ -143,7 +189,6 @@ export class CheckoutComponent {
 
     if (!inicialesValidos) {
       this.checkoutForm.markAllAsTouched();
-      alert('Por favor, rellena todos los campos obligatorios antes de continuar.');
       return;
     }
 
@@ -169,7 +214,6 @@ export class CheckoutComponent {
           console.log(`- Campo '${key}' inválido. Errores:`, control.errors);
         }
       });
-      alert('Por favor, rellena todos los campos correctamente.');
       return;
     }
 
