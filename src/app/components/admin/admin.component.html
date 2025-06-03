@@ -1,34 +1,67 @@
-<div class="p-6">
-    <h2 class="text-2xl font-bold mb-4">Gestión de Productos</h2>
-  
-    <div *ngIf="cargando" class="text-gray-500">Cargando productos...</div>
-  
-    <table *ngIf="!cargando" class="w-full border text-sm text-left text-gray-500 dark:text-gray-400">
-      <thead class="bg-gray-100 dark:bg-gray-800 text-xs text-gray-700 uppercase dark:text-gray-400">
-        <tr>
-          <th scope="col" class="px-4 py-3">Imagen</th>
-          <th scope="col" class="px-4 py-3">Nombre</th>
-          <th scope="col" class="px-4 py-3">Precio</th>
-          <th scope="col" class="px-4 py-3">Stock</th>
-          <th scope="col" class="px-4 py-3">Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of productos" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-          <td class="px-4 py-2">
-            <img [src]="p.image" class="w-14 h-14 object-cover rounded" alt="imagen" />
-          </td>
-          <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
-            {{ p.title }}
-          </td>
-          <td class="px-4 py-2">{{ p.price | currency:'EUR' }}</td>
-          <td class="px-4 py-2">{{ p.quantity || '—' }}</td>
-          <td class="px-4 py-2 space-x-2">
-            <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs">Editar</button>
-            <button class="bg-red-600 text-white px-2 py-1 rounded text-xs">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<div class="mb-6 p-6 bg-white rounded-lg shadow-md">
+  <h2 class="text-2xl font-bold mb-4">Gestión de Productos</h2>
+
+  <div *ngIf="cargando" class="text-gray-500">Cargando productos...</div>
+
+  <div class="mb-4">
+    <button class="bg-green-600 text-white px-4 py-2 rounded" (click)="log('Click en Agregar Nuevo Producto'); agregarProducto()">Agregar Nuevo Producto</button>
   </div>
+
+  <div *ngIf="mostrarFormulario" class="mb-6 p-6 bg-gray-50 rounded-lg shadow-inner">
+    <h3 class="text-lg font-semibold mb-4">{{ modoEdicion ? 'Editar Producto' : 'Añadir Nuevo Producto' }}</h3>
+    <form>
+      <div class="mb-4">
+        <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre</label>
+        <input type="text" id="nombre" [(ngModel)]="productoFormulario.nombre" name="nombre"
+               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div class="mb-3">
+        <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Descripción</label>
+        <textarea id="descripcion" [(ngModel)]="productoFormulario.descripcion" name="descripcion" rows="3"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="precio" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Precio</label>
+        <input type="number" id="precio" [(ngModel)]="productoFormulario.precio" name="precio" step="0.01"
+               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div class="mb-4">
+        <label for="imagen_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">URL Imagen</label>
+        <input type="text" id="imagen_url" [(ngModel)]="productoFormulario.imagen_url" name="imagen_url"
+               class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      </div>
+      <div class="flex justify-end space-x-2 mt-6">
+        <button type="button" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-400" (click)="cancelarEdicion()">Cancelar</button>
+        <button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700" (click)="guardarProducto()">Guardar</button>
+      </div>
+    </form>
+  </div>
+
+  <table *ngIf="!cargando" class="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-collapse">
+    <thead class="bg-gray-100 dark:bg-gray-800 text-xs text-gray-700 uppercase dark:text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3 border-b dark:border-gray-700">Imagen</th>
+        <th scope="col" class="px-6 py-3 border-b dark:border-gray-700">Nombre</th>
+        <th scope="col" class="px-6 py-3 border-b dark:border-gray-700">Precio</th>
+        <th scope="col" class="px-6 py-3 border-b dark:border-gray-700">Acciones</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+      <tr *ngFor="let p of productos" class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+        <td class="px-4 py-2">
+          <img [src]="p.image" class="w-14 h-14 object-cover rounded" alt="imagen" />
+        </td>
+        <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">
+          {{ p.title }}
+        </td>
+        <td class="px-4 py-2">{{ p.price | currency:'EUR' }}</td>
+        <td class="px-4 py-2 space-x-2">
+          <button class="bg-blue-600 text-white px-2 py-1 rounded text-xs" (click)="editarProducto(p)">Editar</button>
+          <button class="bg-red-600 text-white px-2 py-1 rounded text-xs" (click)="eliminarProducto(p.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+  
   

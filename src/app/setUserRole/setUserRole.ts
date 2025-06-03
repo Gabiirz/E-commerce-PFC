@@ -32,5 +32,5 @@ async function setUserRole(userId: string, role: string) {
   console.log('✅ Rol actualizado también en la tabla usuarios');
 }
 
-setUserRole('0c2a3283-3c05-4bdd-85bb-8128f30ead50', 'admin');
+setUserRole('ab9829a4-baf5-456e-ae7d-f31a44dabddc', 'admin');
 

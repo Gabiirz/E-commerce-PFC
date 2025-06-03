@@ -122,9 +122,24 @@ async getProductSupa(id: string): Promise<Product | null> {
 
 
 async updateProductInSupabase(id: string, product: Partial<Product>): Promise<void> {
+  const supabaseData: any = {}; // Object to hold data with Supabase column names
+
+  // Map properties from Product interface to Supabase column names if they exist in the input 'product'
+  if (product.title !== undefined) {
+    supabaseData['nombre'] = product.title;
+  }
+  if (product.description !== undefined) {
+    supabaseData['descripcion'] = product.description;
+  }
+  if (product.price !== undefined) {
+    supabaseData['precio'] = product.price;
+  }
+  if (product.image !== undefined) {
+    supabaseData['imagen_url'] = product.image;
+  }
   const { error } = await this.supabaseService.supabase
     .from('productos')
-    .update(product)
+    .update(supabaseData) // Pass the mapped object here
     .eq('id', id);
 
   if (error) {
