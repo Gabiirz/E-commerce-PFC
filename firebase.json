@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "public": "dist/myapp/browser",
+    "site": "electro-ecommerce-pfc",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

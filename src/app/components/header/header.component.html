@@ -11,16 +11,19 @@
           </div>
       </div>
       
+      <button class="menu-toggle" (click)="menuOpen = !menuOpen">
+        ☰
+      </button>
   
-      <ul class="nav-links" *ngIf="userLoggedIn  ; else guestView">
+      <ul class="nav-links" [ngClass]="{ open: menuOpen }" *ngIf="userLoggedIn  ; else guestView">
         <li><a routerLink="/products" routerLinkActive="!text-green-500" [routerLinkActiveOptions]="{exact: true}" >Home</a></li>
         <li><a routerLink="/cart" routerLinkActive="!text-green-500" [routerLinkActiveOptions]="{exact: true}" >Carrito</a></li>
       </ul>
   
-      <div class="user-actions" *ngIf="userLoggedIn  ">
+      <div class="user-actions" *ngIf="userLoggedIn  " [ngClass]="{ open: menuOpen }">
         <div class="dropdown">
           <button class="dropbtn" (click)="toggleDropdown()">
-            Mi cuenta ▼
+            Mi cuenta
           </button>
           <div class="dropdown-content" [ngClass]="{ show: isDropdownOpen }">
             <span class="email">{{ userEmail }}</span>
@@ -31,7 +34,7 @@
       </div>
   
       <ng-template #guestView>
-        <ul class="nav-links">
+        <ul class="nav-links" [ngClass]="{ open: menuOpen }">
           <li><a routerLink="/login">Iniciar sesión</a></li>
           <li><a routerLink="/register">Registrarse</a></li>
         </ul>
@@ -45,7 +48,7 @@
           <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" />
           </svg>
           @if(cartState.count() > 0 ){
-            <span  class="absolute bg-green-600 size-6 rounded-full flex items-center justify-center -right-2">
+            <span  class="badge bg-green-600 size-6 rounded-full flex items-center justify-center -right-2">
               {{ cartState.count() }}
             </span>
           }

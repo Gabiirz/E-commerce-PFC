@@ -1,7 +1,7 @@
 
 
 
-<div class="mx-auto max-w-screen-xl">
+<div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
     @switch(productsState.state.status()){
         @case('loading'){
             <p>loading...</p>
@@ -13,8 +13,71 @@
         }
 
         @default{
-            
-            <div class="flex justify-end my-6">
+            <div class="flex flex-wrap justify-center gap-2 my-6">
+                <button
+                  type="button"
+                  (click)="filterProducts('termos')"
+                  [ngClass]="{
+                    'bg-gray-200 text-gray-900 border-gray-400': currentFilter() === 'termos',
+                    'text-gray-700 border-gray-300 hover:bg-gray-100': currentFilter() !== 'termos'
+                  }"
+                  class="border font-medium rounded-md text-sm px-4 py-2 transition-colors tracking-wide"
+                >Termos</button>
+              
+                <button
+                  type="button"
+                  (click)="filterProducts('hornos')"
+                  [ngClass]="{
+                    'bg-gray-200 text-gray-900 border-gray-400': currentFilter() === 'hornos',
+                    'text-gray-700 border-gray-300 hover:bg-gray-100': currentFilter() !== 'hornos'
+                  }"
+                  class="border font-medium rounded-md text-sm px-4 py-2 transition-colors tracking-wide"
+                >Hornos</button>
+              
+                <button
+                  type="button"
+                  (click)="filterProducts('frigorificos')"
+                  [ngClass]="{
+                    'bg-gray-200 text-gray-900 border-gray-400': currentFilter() === 'frigorificos',
+                    'text-gray-700 border-gray-300 hover:bg-gray-100': currentFilter() !== 'frigorificos'
+                  }"
+                  class="border font-medium rounded-md text-sm px-4 py-2 transition-colors tracking-wide"
+                >Frigoríficos</button>
+              
+                <button
+                  type="button"
+                  (click)="filterProducts('lavavajillas')"
+                  [ngClass]="{
+                    'bg-gray-200 text-gray-900 border-gray-400': currentFilter() === 'lavavajillas',
+                    'text-gray-700 border-gray-300 hover:bg-gray-100': currentFilter() !== 'lavavajillas'
+                  }"
+                  class="border font-medium rounded-md text-sm px-4 py-2 transition-colors tracking-wide"
+                >Lavavajillas</button>
+              
+                <button
+                  type="button"
+                  (click)="filterProducts('lavadoras')"
+                  [ngClass]="{
+                    'bg-gray-200 text-gray-900 border-gray-400': currentFilter() === 'lavadoras',
+                    'text-gray-700 border-gray-300 hover:bg-gray-100': currentFilter() !== 'lavadoras'
+                  }"
+                  class="border font-medium rounded-md text-sm px-4 py-2 transition-colors tracking-wide"
+                >Lavadoras</button>
+              
+                <button
+                  type="button"
+                  (click)="filterProducts('all')"
+                  [ngClass]="{
+                    'bg-gray-200 text-gray-900 border-gray-400': currentFilter() === 'all',
+                    'text-gray-700 border-gray-300 hover:bg-gray-100': currentFilter() !== 'all'
+                  }"
+                  class="border font-medium rounded-md text-sm px-4 py-2 transition-colors tracking-wide"
+                >Todos los productos</button>
+              </div>
+              
+              
+              
+            <div class="flex justify-end  my-6 px-4">
                 <button type="button" 
                 (click)="changePage()"
                 class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br 
@@ -24,11 +87,22 @@
             </div>
 
             <!-- home.component.html -->
-            <button *ngIf="isAdmin" (click)="goToAdmin()" class="text-white bg-blue-600 hover:bg-blue-700 font-bold py-2 px-4 rounded mb-4" >Administrar productos</button>
+            <button
+            *ngIf="isAdmin"
+            (click)="goToAdmin()"
+            class="bg-gray-100 text-gray-800 border border-gray-300 hover:bg-blue-100 font-medium text-sm py-1.5 px-4 rounded-md shadow-sm transition-colors mb-4"
+          >
+            Administrar productos
+          </button>
+          
+          
 
-            <div class="grid grid-cols-[repeat(4,300px)] gap-6">
+          
+
+          
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
     
-                @for(product of productsState.state().products; track product){
+                @for(product of pagedProducts(); track product.id){
                     <app-product-card class="block" [product] = "product" (addToCart)="addToCart($event)" /> 
                 }
             </div>

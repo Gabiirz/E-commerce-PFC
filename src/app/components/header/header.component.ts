@@ -16,7 +16,6 @@ import { CartStateService } from '../../service/data-access/cart-state.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   cartState = inject(CartStateService).state; // aseguramos que se cree 1 sola vez
   userLoggedIn = false;
-  isDropdownOpen = false;
   userEmail: string | null = null;
   private authSub: Subscription | undefined;
 
@@ -46,9 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     await this.authService.signOut();
   }
 
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
+ 
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
@@ -57,7 +54,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.isDropdownOpen = false;
     }
   }
+  menuOpen = false;
+  isDropdownOpen = false;
+  
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
+  dropdownContentOpen = false;  // controla si el contenido dropdown se muestra
+  
+  toggleDropdownContent() {
+    this.dropdownContentOpen = !this.dropdownContentOpen;
+  }
+  
+  
 }
 
 

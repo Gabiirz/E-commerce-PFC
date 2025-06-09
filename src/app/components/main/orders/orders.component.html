@@ -58,7 +58,7 @@
             <!-- Asegúrate de que order.total existe -->
             <dl class="flex items-center justify-between gap-4 border-t border-gray-200 pt-2 dark:border-gray-700">
               <dt class="text-lg font-bold text-gray-900 dark:text-white">Total</dt>
-              <dd class="text-lg font-bold text-gray-900 dark:text-white">${{ order.total }}</dd>
+              <dd class="text-lg font-bold text-gray-900 dark:text-white">${{ order.total | number:'1.2-2' }}</dd>
             </dl>
           </div>
         </div>
